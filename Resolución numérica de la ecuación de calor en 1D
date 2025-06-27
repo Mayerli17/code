@@ -1,0 +1,56 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
+#Definimos el problema
+
+# Datos físicos
+#k = 80.2  # W/m·K
+#rho = 8960  # kg/m^3
+#C = 385  # J/kg·K
+#a = k / (rho * C)  # difusividad térmica
+
+a = 0.0000232     #Coeficiente de difusion termica  o Constante de difusidad termica
+longitud = 0.7   #mm de la varilla
+tiempo = 100   #segundos
+nodos = 141 #puntos o separaciones de la varilla
+
+#Inicializaciòn
+
+dx = longitud / (nodos - 1)        #nodos - 1 = N 
+dt = 0.2 #Paso de tiempo [s]                    #dt = 0.5 * dx**2 / a 
+t_nodes = int(tiempo / dt) + 1     #tiempo / dt + 1 = T
+
+u = np.zeros(nodos) + 290         #temperatura inicial
+
+#Condiciones de frontera
+
+u[0] = 433    #temperatura inicial en el extremo izquierdo
+u[-1] = 318    #temperatura inicial en el extremo derecho
+
+#Visualizacion con PLOT
+
+fig, axis = plt.subplots()
+
+colorear = axis.pcolormesh([u], cmap = plt.cm.jet, vmin = 290, vmax = 433)   #Temperaura de la varilla
+plt.title("Distribucion de temperatura en la varilla")
+plt.colorbar(colorear, ax = axis)
+axis.set_ylim([-2, 2])
+
+#Simular
+contador = 0
+
+while contador < tiempo:
+    w = u.copy()
+    for i in range(1, nodos - 1):
+        u[i] = dt * a * (w[i-1] -2*w[i] +w[i+1])/dx**2 +w[i]
+
+    contador  += dt
+
+    print("t: {:.3f} [s], Promedio de temperatura: {:.2f} K".format(contador, np.average(u)))
+
+    #Actualizando el grafico(plot)
+    colorear.set_array([u])
+    axis.set_title("Distribucion en el tiempo de : {:.3f} [s].".format(contador))
+    plt.pause(0.01)
+
+plt.show()

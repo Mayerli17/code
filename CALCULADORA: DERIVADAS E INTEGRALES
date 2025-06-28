@@ -1,0 +1,85 @@
+from tkinter import *
+from PIL import Image, ImageTk, ImageSequence
+import sympy as sp
+
+x = sp.Symbol('x')
+
+# Crear ventana principal
+raiz = Tk()
+raiz.title("CALCULADORA: DERIVADAS E INTEGRALES")
+raiz.geometry("400x300")
+raiz.resizable(True, True)
+raiz.iconbitmap("LOGO.ico")
+
+# Fondo GIF animado
+gif = Image.open("E:/YELIIIIII/python/fondo.gif")
+frames = [ImageTk.PhotoImage(img.resize((400, 300))) for img in ImageSequence.Iterator(gif)]
+fondo_label = Label(raiz)
+fondo_label.place(x=0, y=0, relwidth=1, relheight=1)
+
+def animar_fondo(i):
+    frame = frames[i]
+    fondo_label.configure(image=frame)
+    raiz.after(100, animar_fondo, (i + 1) % len(frames))
+
+animar_fondo(0)
+
+# === Funciones ===
+def calcular():
+    try:
+        funcion = sp.sympify(entry_funcion.get())
+        punto = float(entry_derivar.get())
+        derivada = sp.diff(funcion, x)
+        valor_derivada = round(float(derivada.evalf(subs={x: punto})), 2)
+
+        xi = float(entry_xi.get())
+        xf = float(entry_xf.get())
+        integral = round(float(sp.integrate(funcion, (x, xi, xf))), 2)
+
+        entry_resultado_derivada.delete(0, END)
+        entry_resultado_derivada.insert(0, str(valor_derivada))
+
+        entry_resultado_integral.delete(0, END)
+        entry_resultado_integral.insert(0, str(integral))
+
+    except:
+        entry_resultado_derivada.delete(0, END)
+        entry_resultado_integral.delete(0, END)
+        entry_resultado_derivada.insert(0, "Error")
+        entry_resultado_integral.insert(0, "Error")
+
+def borrar():
+    entry_funcion.delete(0, END)
+    entry_derivar.delete(0, END)
+    entry_resultado_derivada.delete(0, END)
+    entry_xi.delete(0, END)
+    entry_xf.delete(0, END)
+    entry_resultado_integral.delete(0, END)
+
+# === Widgets encima del fondo ===
+Label(raiz, text="Inserte la ecuación", font=("Arial", 10), fg="black", bg="skyblue").place(x=10, y=50, width=120, height=25)
+Label(raiz, text="=", font=("Arial", 12), bg="powderblue").place(x=135, y=50)
+entry_funcion = Entry(raiz)
+entry_funcion.place(x=155, y=50, width=225, height=25)
+
+Label(raiz, text="Derivar en", font=("Arial", 10), fg="black", bg="paleturquoise").place(x=10, y=110, width=120, height=25)
+entry_derivar = Entry(raiz)
+entry_derivar.place(x=135, y=110, width=60, height=25)
+Label(raiz, text="=", font=("Arial", 12), bg="powderblue").place(x=200, y=110)
+entry_resultado_derivada = Entry(raiz)
+entry_resultado_derivada.place(x=220, y=110, width=160, height=25)
+
+Label(raiz, text="Integrar de", font=("Arial", 10), fg="black", bg="paleturquoise").place(x=10, y=160, width=120, height=25)
+entry_xi = Entry(raiz)
+entry_xi.place(x=135, y=160, width=35, height=25)
+Label(raiz, text="a", font=("Arial", 10), bg="paleturquoise").place(x=180, y=160)
+entry_xf = Entry(raiz)
+entry_xf.place(x=200, y=160, width=35, height=25)
+Label(raiz, text="=", font=("Arial", 12), bg="powderblue").place(x=240, y=160)
+entry_resultado_integral = Entry(raiz)
+entry_resultado_integral.place(x=260, y=160, width=120, height=25)
+
+Button(raiz, text="Calcular", command=calcular, bg="lightgreen").place(x=110, y=220, width=80, height=30)
+Button(raiz, text="Borrar", command=borrar, bg="lightcoral").place(x=200, y=220, width=80, height=30)
+
+raiz.mainloop()

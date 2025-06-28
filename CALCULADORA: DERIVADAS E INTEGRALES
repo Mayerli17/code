@@ -4,7 +4,7 @@ import sympy as sp
 
 x = sp.Symbol('x')
 
-# Crear ventana principal
+# Ventana principal
 raiz = Tk()
 raiz.title("CALCULADORA: DERIVADAS E INTEGRALES")
 raiz.geometry("400x300")
@@ -24,7 +24,7 @@ def animar_fondo(i):
 
 animar_fondo(0)
 
-# === Funciones ===
+
 def calcular():
     try:
         funcion = sp.sympify(entry_funcion.get())
@@ -56,7 +56,7 @@ def borrar():
     entry_xf.delete(0, END)
     entry_resultado_integral.delete(0, END)
 
-# === Widgets encima del fondo ===
+
 Label(raiz, text="Inserte la ecuación", font=("Arial", 10), fg="black", bg="skyblue").place(x=10, y=50, width=120, height=25)
 Label(raiz, text="=", font=("Arial", 12), bg="powderblue").place(x=135, y=50)
 entry_funcion = Entry(raiz)

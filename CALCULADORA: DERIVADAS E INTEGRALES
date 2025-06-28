@@ -4,14 +4,12 @@ import sympy as sp
 
 x = sp.Symbol('x')
 
-# Ventana principal
 raiz = Tk()
 raiz.title("CALCULADORA: DERIVADAS E INTEGRALES")
 raiz.geometry("400x300")
 raiz.resizable(True, True)
 raiz.iconbitmap("LOGO.ico")
 
-# Fondo GIF animado
 gif = Image.open("fondo.gif")
 frames = [ImageTk.PhotoImage(img.resize((400, 300))) for img in ImageSequence.Iterator(gif)]
 fondo_label = Label(raiz)
